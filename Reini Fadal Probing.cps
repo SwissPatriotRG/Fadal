@@ -1,15 +1,3 @@
-/**
-  Copyright (C) 2012-2021 by Autodesk, Inc.
-  All rights reserved.
-
-  Fadal post processor configuration.
-
-  $Revision: 43151 08c79bb5b30997ccb5fb33ab8e7c8c26981be334 $
-  $Date: 2021-02-19 00:25:13 $
-  
-  FORKID {D3B70418-781B-4cfb-8CD2-98E9C897515A}
-*/
-
 description = "Reini's Fadal";
 vendor = "Fadal";
 vendorUrl = "http://www.fadal.com";
@@ -1305,7 +1293,7 @@ function writeProbeCycle(x, y, z, cycle) {
                 + " Approach: " + xyzFormat.format(cycle.probeClearance)
                 + " Overtravel: " + xyzFormat.format(cycle.probeOvertravel));
 
-            probeXChannel(cycle, x, y, z, xwidth, linkingZHeight);
+            probeXChannel(cycle, x, y, z, xWidth, linkingZHeight);
             probeYChannel(cycle, x, y, z, yWidth, linkingZHeight);
             break;
         //======================================================================================
@@ -1328,8 +1316,8 @@ function writeProbeCycle(x, y, z, cycle) {
                 + " Approach: " + xyzFormat.format(cycle.probeClearance)
                 + " Overtravel: " + xyzFormat.format(cycle.probeOvertravel));
 
-            probeXWall(cycle, x, y, z, xWidth);
-            probeYWall(cycle, x, y, z, yWidth);
+            probeXWall(cycle, x, y, z, xWidth, linkingZHeight);
+            probeYWall(cycle, x, y, z, yWidth, linkingZHeight);
             break;
         //======================================================================================
         case "probing-xy-outer-corner":
@@ -1397,7 +1385,7 @@ function writeProbeCycle(x, y, z, cycle) {
                 + " Approach: " + xyzFormat.format(cycle.probeClearance)
                 + " Overtravel: " + xyzFormat.format(cycle.probeOvertravel));
 
-            probeXWall(cycle, x, y, z, width);
+            probeXWall(cycle, x, y, z, width, linkingZHeight);
             break;
         //======================================================================================
         case "probing-y-wall":
@@ -1414,7 +1402,7 @@ function writeProbeCycle(x, y, z, cycle) {
                 + " Approach: " + xyzFormat.format(cycle.probeClearance)
                 + " Overtravel: " + xyzFormat.format(cycle.probeOvertravel));
 
-            probeYWall(cycle, x, y, z, width);
+            probeYWall(cycle, x, y, z, width, linkingZHeight);
             break;
         //======================================================================================
         case "probing-x-channel":
@@ -1594,7 +1582,7 @@ function probeY(_cycle, x, y, probeLateralMove, expectedProbeHit) {
     );
 }
 
-function probeXWall(_cycle, x, y, z, width) {
+function probeXWall(_cycle, x, y, z, width, linkingZHeight) {
     var lateralMove = (width / 2) + (cycle.probeClearance + tool.diameter / 2);
     var probeLateralMove = (width / 2) - cycle.probeOvertravel;
 
@@ -1621,7 +1609,7 @@ function probeXWall(_cycle, x, y, z, width) {
         "F" + feedFormat.format(cycle.feedrate),
         "P2"
     );
-    protectedProbeMove(cycle, x, y, zlinkingZHeight);
+    protectedProbeMove(cycle, x, y, linkingZHeight);
 
     writeProbeSizeTolerance(width, "X", -tool.diameter)
     //Calculate Center X
@@ -1634,7 +1622,7 @@ function probeXWall(_cycle, x, y, z, width) {
         + "-" + xyzFormat.format(x));
 }
 
-function probeYWall(_cycle, x, y, z, width) {
+function probeYWall(_cycle, x, y, z, width, linkingZHeight) {
     var lateralMove = (width / 2) + (cycle.probeClearance + tool.diameter / 2);
     var probeLateralMove = (width / 2) - cycle.probeOvertravel;
     //XY Probe = G17 Plane
